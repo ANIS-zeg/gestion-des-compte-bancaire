@@ -1,11 +1,10 @@
 // config/database.js
 const { Sequelize } = require('sequelize');
 
-const sequelize = new Sequelize('Bank', 'root', 'root', {
+const sequelize = new Sequelize('bank', 'root', '', {
   host: 'localhost',
   dialect: 'mysql',
-  port:3306,
-  logging: false,
+  port: 3306
 });
 
 sequelize.authenticate()

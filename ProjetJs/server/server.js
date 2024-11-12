@@ -1,28 +1,36 @@
-// server.js
 const express = require('express');
-const sequelize = require('./config/database'); // Import de la configuration de la base de données
+const sequelize = require('./config/database'); // Database configuration
+require('dotenv').config(); // Load environment variables from .env file
 const app = express();
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 
-// Synchronisation de la base de données pour créer les tables
-sequelize.sync({ force: false }) // force: true recrée les tables à chaque exécution
-  .then(() => {
-    console.log('La base de données est synchronisée.');
-  })
-  .catch(error => {
-    console.error('Erreur lors de la synchronisation de la base de données :', error);
-  });
-
-// Configuration des middlewares et routes
+// Middleware configuration
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Exemple de route pour vérifier que le serveur fonctionne
+// Import routes
+const authRoutes = require('./routes/authRoutes');
+const loginHistoryRoutes = require('./routes/loginHistoryRoutes');
+
+// Use routes
+app.use('/api/auth', authRoutes);
+app.use('/api/login-history', loginHistoryRoutes);
+
+// Database synchronization to create tables if they don’t exist
+sequelize.sync({ force: false }) // Set to true only in development to recreate tables
+  .then(() => {
+    console.log('Database synchronized successfully.');
+  })
+  .catch(error => {
+    console.error('Error during database synchronization:', error);
+  });
+
+// Example route to check if the server is running
 app.get('/', (req, res) => {
-  res.send('Bienvenue sur le serveur bancaire en ligne !');
+  res.send('Welcome to the Online Banking Server!');
 });
 
-// Lancer le serveur sur localhost
+// Start the server on localhost
 app.listen(PORT, () => {
-  console.log(`Serveur démarré sur http://localhost:${PORT}`);
+  console.log(`Server started on http://localhost:${PORT}`);
 });

@@ -1,31 +1,40 @@
 // models/LoginHistory.js
-const { Sequelize, DataTypes } = require('sequelize');
+const { DataTypes } = require('sequelize');
 const sequelize = require('../config/database');
-const User = require('./User');  // Relation avec User
+const User = require('./User');
 
 const LoginHistory = sequelize.define('LoginHistory', {
   id: {
     type: DataTypes.INTEGER,
     primaryKey: true,
-    autoIncrement: true,
-  },
-  ipAddress: {
-    type: DataTypes.STRING,
-    allowNull: false,
-  },
-  userAgent: {
-    type: DataTypes.STRING,
-    allowNull: false,
+    autoIncrement: true
   },
   loginDate: {
     type: DataTypes.DATE,
-    allowNull: false,
-    defaultValue: Sequelize.NOW,
+    defaultValue: DataTypes.NOW
   },
+  ipAddress: {
+    type: DataTypes.STRING,
+    allowNull: false
+  },
+  userAgent: {
+    type: DataTypes.STRING,
+    allowNull: false
+  },
+  userId: {
+    type: DataTypes.INTEGER,
+    references: {
+      model: User,
+      key: 'id'
+    },
+    allowNull: false
+  }
+}, {
+  tableName: 'login_histories',
+  timestamps: true
 });
 
-// Relation entre LoginHistory et User : un utilisateur peut avoir plusieurs connexions
-User.hasMany(LoginHistory);
-LoginHistory.belongsTo(User);
+User.hasMany(LoginHistory, { foreignKey: 'userId' });
+LoginHistory.belongsTo(User, { foreignKey: 'userId' });
 
 module.exports = LoginHistory;

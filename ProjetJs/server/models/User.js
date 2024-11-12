@@ -21,7 +21,6 @@ const User = sequelize.define('User', {
     type: DataTypes.STRING,
     allowNull: false,
   },
-  // Autres informations personnelles si nécessaires (adresse, téléphone...)
 });
 
 module.exports = User;
