@@ -1,7 +1,6 @@
-// models/BankAccount.js
 const { Sequelize, DataTypes } = require('sequelize');
 const sequelize = require('../config/database');
-const User = require('./User');  // Relation avec User
+const User = require('./User');
 
 const BankAccount = sequelize.define('BankAccount', {
   id: {
@@ -16,16 +15,15 @@ const BankAccount = sequelize.define('BankAccount', {
   type: {
     type: DataTypes.STRING,
     allowNull: false,
-    defaultValue: 'current', // Par défaut "compte courant"
+    defaultValue: 'current',
   },
   balance: {
     type: DataTypes.FLOAT,
     allowNull: false,
-    defaultValue: 0.0, // Solde initial du compte
+    defaultValue: 0.0,
   },
 });
 
-// Relation entre User et BankAccount : un utilisateur peut avoir plusieurs comptes bancaires
 User.hasMany(BankAccount);
 BankAccount.belongsTo(User);
 

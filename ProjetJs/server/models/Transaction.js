@@ -1,7 +1,6 @@
-// models/Transaction.js
 const { Sequelize, DataTypes } = require('sequelize');
 const sequelize = require('../config/database');
-const BankAccount = require('./BankAccount');  // Relation avec BankAccount
+const BankAccount = require('./BankAccount');
 
 const Transaction = sequelize.define('Transaction', {
   id: {
@@ -11,7 +10,7 @@ const Transaction = sequelize.define('Transaction', {
   },
   type: {
     type: DataTypes.STRING,
-    allowNull: false, // "deposit" ou "withdrawal"
+    allowNull: false,
   },
   amount: {
     type: DataTypes.FLOAT,
@@ -20,7 +19,7 @@ const Transaction = sequelize.define('Transaction', {
   date: {
     type: DataTypes.DATE,
     allowNull: false,
-    defaultValue: Sequelize.NOW, // Date de la transaction
+    defaultValue: Sequelize.NOW,
   },
   balanceAfter: {
     type: DataTypes.FLOAT,
@@ -28,7 +27,6 @@ const Transaction = sequelize.define('Transaction', {
   },
 });
 
-// Relation entre Transaction et BankAccount : une transaction appartient à un compte
 BankAccount.hasMany(Transaction);
 Transaction.belongsTo(BankAccount);
 

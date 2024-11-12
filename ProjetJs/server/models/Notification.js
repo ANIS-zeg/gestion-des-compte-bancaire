@@ -1,7 +1,6 @@
-// models/Notification.js
 const { Sequelize, DataTypes } = require('sequelize');
 const sequelize = require('../config/database');
-const User = require('./User');  // Relation avec User
+const User = require('./User');
 
 const Notification = sequelize.define('Notification', {
   id: {
@@ -15,10 +14,10 @@ const Notification = sequelize.define('Notification', {
   },
   read: {
     type: DataTypes.BOOLEAN,
-    defaultValue: false, // Notification non lue par défaut
+    defaultValue: false,
   },
   type: {
-    type: DataTypes.STRING, // Par exemple : "Solde Bas"
+    type: DataTypes.STRING,
     allowNull: false,
   },
   date: {
@@ -28,7 +27,6 @@ const Notification = sequelize.define('Notification', {
   },
 });
 
-// Relation entre User et Notification : un utilisateur peut avoir plusieurs notifications
 User.hasMany(Notification);
 Notification.belongsTo(User);
 
