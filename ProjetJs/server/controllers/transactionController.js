@@ -2,6 +2,7 @@ const Transaction = require('../models/Transaction');
 const BankAccount = require('../models/BankAccount');
 const User = require('../models/User')
 const { Op } = require('sequelize');
+const { createObjectCsvStringifier } = require('csv-writer');
 
 exports.filterTransactionsByPeriod = async (req, res) => {
   try {
@@ -31,15 +32,6 @@ exports.filterTransactionsByPeriod = async (req, res) => {
         return res.status(400).json({ message: 'Invalid type. Use jours, mois, or annees.' });
     }
 
-    // const transactions = await Transaction.findAll({
-    //   where: {
-    //     createdAt: {
-    //       [Op.gte]: fromDate
-    //     }
-    //   },
-    //   order: [['createdAt', 'DESC']]
-    // });
-
     const accountsWithTransactions = await BankAccount.findAll({
       where: { user_id: userId },
       include: [{
@@ -56,5 +48,53 @@ exports.filterTransactionsByPeriod = async (req, res) => {
   } catch (error) {
     console.log(error)
     res.status(500).json({ message: 'Error filtering transactions', error });
+  }
+};
+
+exports.downloadTransactionHistory = async (req, res) => {
+  try {
+    const userId = req.user.id;
+
+    const accountsWithTransactions = await BankAccount.findAll({
+      where: { user_id: userId },
+      include: [{
+        model: Transaction,
+        as: 'transactions',
+        required: true
+      }]
+    });
+
+    const transactions = accountsWithTransactions.flatMap(account => 
+      account.transactions.map(transaction => ({
+        accountName: account.name,
+        date: transaction.createdAt,
+        type: transaction.type,
+        amount: transaction.amount,
+        balance_after_transaction: transaction.balance_after_transaction
+      }))
+    );
+
+    if (transactions.length === 0) {
+      return res.status(404).json({ message: 'No transactions found to download.' });
+    }
+
+    const csvStringifier = createObjectCsvStringifier({
+      header: [
+        { id: 'accountName', title: 'Account Name' },
+        { id: 'date', title: 'Date' },
+        { id: 'type', title: 'Type' },
+        { id: 'amount', title: 'Amount' },
+        { id: 'balance_after_transaction', title: 'Balance After Transaction' }
+      ]
+    });
+
+    const csvContent = csvStringifier.getHeaderString() + csvStringifier.stringifyRecords(transactions);
+
+    res.setHeader('Content-Type', 'text/csv');
+    res.setHeader('Content-Disposition', 'attachment; filename=transaction_history.csv');
+    res.status(200).send(csvContent);
+
+  } catch (error) {
+    res.status(500).json({ message: 'Error generating transaction history CSV', error });
   }
 };
