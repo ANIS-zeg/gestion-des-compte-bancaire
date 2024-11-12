@@ -1,33 +1,39 @@
-const { Sequelize, DataTypes } = require('sequelize');
+const { DataTypes } = require('sequelize');
 const sequelize = require('../config/database');
-const User = require('./User');
+const BankAccount = require('./BankAccount');
 
 const Notification = sequelize.define('Notification', {
   id: {
     type: DataTypes.INTEGER,
     primaryKey: true,
-    autoIncrement: true,
-  },
-  message: {
-    type: DataTypes.STRING,
-    allowNull: false,
-  },
-  read: {
-    type: DataTypes.BOOLEAN,
-    defaultValue: false,
+    autoIncrement: true
   },
   type: {
     type: DataTypes.STRING,
-    allowNull: false,
+    allowNull: false
   },
-  date: {
-    type: DataTypes.DATE,
-    allowNull: false,
-    defaultValue: Sequelize.NOW,
+  message: {
+    type: DataTypes.STRING,
+    allowNull: false
   },
+  threshold: {
+    type: DataTypes.DECIMAL,
+    allowNull: false
+  },
+  account_id: {
+    type: DataTypes.INTEGER,
+    references: {
+      model: BankAccount,
+      key: 'id'
+    },
+    allowNull: false
+  }
+}, {
+  tableName: 'notifications',
+  timestamps: true
 });
 
-User.hasMany(Notification);
-Notification.belongsTo(User);
+BankAccount.hasOne(Notification, { foreignKey: 'account_id' });
+Notification.belongsTo(BankAccount, { foreignKey: 'account_id' });
 
 module.exports = Notification;

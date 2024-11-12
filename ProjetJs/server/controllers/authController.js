@@ -47,13 +47,11 @@ exports.login = async (req, res) => {
     const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET, { expiresIn: '1h' });
 
     const ipAddress = req.ip || 'unknown';
-    const userAgent = req.headers['user-agent'] || 'unknown';
 
     await LoginHistory.create({
-      userId: user.id,
-      ipAddress: ipAddress,
-      userAgent: userAgent,
-      loginDate: new Date()
+      user_id: user.id,
+      ip_address: ipAddress,
+      login_date: new Date()
     });
 
     res.status(200).json({ message: 'Login successful', token });

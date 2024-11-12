@@ -1,4 +1,4 @@
-const { Sequelize, DataTypes } = require('sequelize');
+const { DataTypes } = require('sequelize');
 const sequelize = require('../config/database');
 const User = require('./User');
 
@@ -6,25 +6,34 @@ const BankAccount = sequelize.define('BankAccount', {
   id: {
     type: DataTypes.INTEGER,
     primaryKey: true,
-    autoIncrement: true,
+    autoIncrement: true
   },
   name: {
     type: DataTypes.STRING,
-    allowNull: false,
+    allowNull: false
   },
   type: {
     type: DataTypes.STRING,
-    allowNull: false,
-    defaultValue: 'current',
+    allowNull: false
   },
   balance: {
-    type: DataTypes.FLOAT,
-    allowNull: false,
-    defaultValue: 0.0,
+    type: DataTypes.DECIMAL,
+    defaultValue: 0.0
   },
+  user_id: {
+    type: DataTypes.INTEGER,
+    references: {
+      model: User,
+      key: 'id'
+    },
+    allowNull: false
+  }
+}, {
+  tableName: 'bank_accounts',
+  timestamps: true
 });
 
-User.hasMany(BankAccount);
-BankAccount.belongsTo(User);
+User.hasMany(BankAccount, { foreignKey: 'user_id' });
+BankAccount.belongsTo(User, { foreignKey: 'user_id' });
 
 module.exports = BankAccount;
