@@ -4,6 +4,7 @@ require('dotenv').config();
 const authRoutes = require('./routes/authRoutes');
 const loginHistoryRoutes = require('./routes/loginHistoryRoutes');
 const transactionRoutes = require('./routes/transactionRoutes');
+const userController = require('./routes/userController');
 
 require('./models/BankAccount')
 require('./models/LoginHistory')
@@ -18,12 +19,6 @@ const PORT = process.env.PORT || 3000;
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Import routes
-const authRoutes = require('./routes/authRoutes');
-const loginHistoryRoutes = require('./routes/loginHistoryRoutes');
-const userController = require('./routes/userController');
-
-// Use routes
 // Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/login-history', loginHistoryRoutes);
