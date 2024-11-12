@@ -11,10 +11,12 @@ app.use(express.urlencoded({ extended: true }));
 // Import routes
 const authRoutes = require('./routes/authRoutes');
 const loginHistoryRoutes = require('./routes/loginHistoryRoutes');
+const userController = require('./routes/userController');
 
 // Use routes
 app.use('/api/auth', authRoutes);
 app.use('/api/login-history', loginHistoryRoutes);
+app.use('/api/user', userController);
 
 // Database synchronization to create tables if they don’t exist
 sequelize.sync({ force: false }) // Set to true only in development to recreate tables
