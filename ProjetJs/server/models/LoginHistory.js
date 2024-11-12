@@ -1,4 +1,3 @@
-// models/LoginHistory.js
 const { DataTypes } = require('sequelize');
 const sequelize = require('../config/database');
 const User = require('./User');
@@ -9,19 +8,15 @@ const LoginHistory = sequelize.define('LoginHistory', {
     primaryKey: true,
     autoIncrement: true
   },
-  loginDate: {
+  login_date: {
     type: DataTypes.DATE,
     defaultValue: DataTypes.NOW
   },
-  ipAddress: {
+  ip_address: {
     type: DataTypes.STRING,
     allowNull: false
   },
-  userAgent: {
-    type: DataTypes.STRING,
-    allowNull: false
-  },
-  userId: {
+  user_id: {
     type: DataTypes.INTEGER,
     references: {
       model: User,
@@ -34,7 +29,7 @@ const LoginHistory = sequelize.define('LoginHistory', {
   timestamps: true
 });
 
-User.hasMany(LoginHistory, { foreignKey: 'userId' });
-LoginHistory.belongsTo(User, { foreignKey: 'userId' });
+User.hasMany(LoginHistory, { foreignKey: 'user_id' });
+LoginHistory.belongsTo(User, { foreignKey: 'user_id' });
 
 module.exports = LoginHistory;

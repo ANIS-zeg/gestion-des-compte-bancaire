@@ -7,15 +7,12 @@ exports.register = async (req, res) => {
   try {
     const { name, email, password } = req.body;
 
-    // Vérification des données
     if (!name || !email || !password) {
       return res.status(400).json({ message: 'All fields are required' });
     }
 
-    // Hachage du mot de passe
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    // Création de l'utilisateur
     const newUser = await User.create({
       name,
       email,
@@ -29,8 +26,6 @@ exports.register = async (req, res) => {
 };
 
 
-
-// Connexion de l'utilisateur avec enregistrement de l'historique
 exports.login = async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -49,19 +44,14 @@ exports.login = async (req, res) => {
       return res.status(401).json({ message: 'Invalid credentials' });
     }
 
-    // Generate JWT token using the secret key from environment variables
     const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET, { expiresIn: '1h' });
 
-    // Capture IP address and User Agent for login history
     const ipAddress = req.ip || 'unknown';
-    const userAgent = req.headers['user-agent'] || 'unknown';
 
-    // Save login history
     await LoginHistory.create({
-      userId: user.id,
-      ipAddress: ipAddress,
-      userAgent: userAgent,
-      loginDate: new Date()
+      user_id: user.id,
+      ip_address: ipAddress,
+      login_date: new Date()
     });
 
     res.status(200).json({ message: 'Login successful', token });
@@ -70,9 +60,7 @@ exports.login = async (req, res) => {
   }
 };
 
-
-// Déconnexion de l'utilisateur (dépend de l'implémentation côté client pour invalider le token)
-// exports.logout = (req, res) => {
-//   res.status(200).json({ message: 'Logout successful' });
-// };
+exports.logout = (req, res) => {
+  res.status(200).json({ message: 'Logout successful' });
+};
 

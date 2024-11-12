@@ -1,35 +1,43 @@
-// models/Transaction.js
-const { Sequelize, DataTypes } = require('sequelize');
+const { DataTypes } = require('sequelize');
 const sequelize = require('../config/database');
-const BankAccount = require('./BankAccount');  // Relation avec BankAccount
+const BankAccount = require('./BankAccount');
 
 const Transaction = sequelize.define('Transaction', {
   id: {
     type: DataTypes.INTEGER,
     primaryKey: true,
-    autoIncrement: true,
+    autoIncrement: true
   },
   type: {
-    type: DataTypes.STRING,
-    allowNull: false, // "deposit" ou "withdrawal"
+    type: DataTypes.ENUM('deposit', 'withdrawal'),
+    allowNull: false
   },
   amount: {
-    type: DataTypes.FLOAT,
-    allowNull: false,
+    type: DataTypes.DECIMAL,
+    allowNull: false
   },
   date: {
     type: DataTypes.DATE,
-    allowNull: false,
-    defaultValue: Sequelize.NOW, // Date de la transaction
+    defaultValue: DataTypes.NOW
   },
-  balanceAfter: {
-    type: DataTypes.FLOAT,
-    allowNull: false,
+  balance_after_transaction: {
+    type: DataTypes.DECIMAL,
+    allowNull: false
   },
+  account_id: {
+    type: DataTypes.INTEGER,
+    references: {
+      model: BankAccount,
+      key: 'id'
+    },
+    allowNull: false
+  }
+}, {
+  tableName: 'transactions',
+  timestamps: true
 });
 
-// Relation entre Transaction et BankAccount : une transaction appartient à un compte
-BankAccount.hasMany(Transaction);
-Transaction.belongsTo(BankAccount);
+BankAccount.hasMany(Transaction, { foreignKey: 'account_id', as: 'transactions' });
+Transaction.belongsTo(BankAccount, { foreignKey: 'account_id' });
 
 module.exports = Transaction;

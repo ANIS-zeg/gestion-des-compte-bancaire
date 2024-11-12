@@ -1,35 +1,39 @@
-// models/Notification.js
-const { Sequelize, DataTypes } = require('sequelize');
+const { DataTypes } = require('sequelize');
 const sequelize = require('../config/database');
-const User = require('./User');  // Relation avec User
+const BankAccount = require('./BankAccount');
 
 const Notification = sequelize.define('Notification', {
   id: {
     type: DataTypes.INTEGER,
     primaryKey: true,
-    autoIncrement: true,
+    autoIncrement: true
+  },
+  type: {
+    type: DataTypes.STRING,
+    allowNull: false
   },
   message: {
     type: DataTypes.STRING,
-    allowNull: false,
+    allowNull: false
   },
-  read: {
-    type: DataTypes.BOOLEAN,
-    defaultValue: false, // Notification non lue par défaut
+  threshold: {
+    type: DataTypes.DECIMAL,
+    allowNull: false
   },
-  type: {
-    type: DataTypes.STRING, // Par exemple : "Solde Bas"
-    allowNull: false,
-  },
-  date: {
-    type: DataTypes.DATE,
-    allowNull: false,
-    defaultValue: Sequelize.NOW,
-  },
+  account_id: {
+    type: DataTypes.INTEGER,
+    references: {
+      model: BankAccount,
+      key: 'id'
+    },
+    allowNull: false
+  }
+}, {
+  tableName: 'notifications',
+  timestamps: true
 });
 
-// Relation entre User et Notification : un utilisateur peut avoir plusieurs notifications
-User.hasMany(Notification);
-Notification.belongsTo(User);
+BankAccount.hasOne(Notification, { foreignKey: 'account_id' });
+Notification.belongsTo(BankAccount, { foreignKey: 'account_id' });
 
 module.exports = Notification;
