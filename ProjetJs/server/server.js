@@ -5,6 +5,12 @@ const authRoutes = require('./routes/authRoutes');
 const loginHistoryRoutes = require('./routes/loginHistoryRoutes');
 const transactionRoutes = require('./routes/transactionRoutes');
 
+require('./models/BankAccount')
+require('./models/LoginHistory')
+require('./models/Notification')
+require('./models/Transaction')
+require('./models/User')
+
 const app = express();
 const PORT = process.env.PORT || 3000;
 

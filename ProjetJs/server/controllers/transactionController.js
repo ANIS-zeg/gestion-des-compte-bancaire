@@ -41,7 +41,7 @@ exports.filterTransactionsByPeriod = async (req, res) => {
     // });
 
     const accountsWithTransactions = await BankAccount.findAll({
-      where: { userId },
+      where: { user_id: userId },
       include: [{
         model: Transaction,
         as: 'transactions',

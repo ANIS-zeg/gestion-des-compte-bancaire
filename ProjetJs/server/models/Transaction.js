@@ -37,7 +37,7 @@ const Transaction = sequelize.define('Transaction', {
   timestamps: true
 });
 
-BankAccount.hasMany(Transaction, { foreignKey: 'account_id' });
+BankAccount.hasMany(Transaction, { foreignKey: 'account_id', as: 'transactions' });
 Transaction.belongsTo(BankAccount, { foreignKey: 'account_id' });
 
 module.exports = Transaction;
