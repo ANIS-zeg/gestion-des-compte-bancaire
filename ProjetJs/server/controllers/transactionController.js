@@ -1,5 +1,6 @@
 const Transaction = require('../models/Transaction');
 const BankAccount = require('../models/BankAccount');
+const Notification = require('../models/Notification');
 const User = require('../models/User')
 const { Op } = require('sequelize');
 const { createObjectCsvStringifier } = require('csv-writer');
@@ -130,7 +131,7 @@ exports.createTransaction = async (req, res) => {
     }
 
     // Calcul du nouveau solde après la transaction
-    const newBalance = type === 'deposit' ? account.balance + amount : account.balance - amount;
+    const newBalance = type === 'deposit' ? parseFloat(account.balance) + parseFloat(amount) : parseFloat(account.balance) - parseFloat(amount);
 
     // Création de la transaction
     const transaction = await Transaction.create({

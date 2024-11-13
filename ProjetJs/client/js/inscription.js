@@ -6,8 +6,6 @@ function validateForm() {
       alert("Les mots de passe ne correspondent pas.");
       return false;
     }
-  
-  
     return true;
   }
   
