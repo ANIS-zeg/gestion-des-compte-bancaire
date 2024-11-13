@@ -11,9 +11,7 @@ $(document).ready(function () {
             method: "POST",
             contentType: "application/json",
             data: JSON.stringify({ email, password }),
-            success: function (response) {
-                alert(response.message);
-                
+            success: function (response) {                
                 // Store the token in local storage for session management
                 localStorage.setItem("token", response.token);
                 window.location.href = "index.html";
