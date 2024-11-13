@@ -5,37 +5,37 @@ $(document).ready(function() {
     // Fetch the last three transactions
     fetchTransactions();
 
-    // Fetch the last two notifications
-    fetchNotifications();
+    $('#download-history').click(function() {
+        downloadTransactionHistory();
+    });
 });
 
 // Function to fetch accounts and calculate total balance
 function fetchAccounts() {
+    const token = localStorage.getItem('token'); // Get the token from localStorage
     $.ajax({
         url: 'http://localhost:3000/api/accounts/list',
         method: 'GET',
+        headers: {
+            'Authorization': `Bearer ${token}` // Set the Authorization header
+        },
         success: function(data) {
-            let totalBalance = 0;
-            const accountSection = $('.col-md-8.mb-4:first'); // Target first account section
+            const accountSection = $('.accounts-cards');
             accountSection.empty();
 
             data.accounts.forEach(account => {
-                // Display each account with its balance
+                console.log(account)
                 accountSection.append(`
                     <div class="card mb-3">
                         <div class="card-body">
                             <h5 class="card-title">${account.name}</h5>
-                            <p class="card-text">**** ${account.id}</p>
-                            <p class="card-text">${account.balance.toFixed(2)} €</p>
-                            <a href="transaction.html?type=account&accountId=${account.id}" class="btn btn-dark view-account-transactions">Voir les transactions</a>
+                            <p class="card-text">${account.type}</p>
+                            <p class="card-text">${account.balance} €</p>
+                            <a href="transactions.html?type=account&accountId=${account.id}" class="btn btn-dark view-account-transactions">Voir les transactions</a>
                         </div>
                     </div>
                 `);
-                totalBalance += parseFloat(account.balance);
             });
-
-            // Display total balance
-            $('.display-4').text(`${totalBalance.toFixed(2)} €`);
         },
         error: function(error) {
             console.error('Error fetching accounts:', error);
@@ -43,11 +43,19 @@ function fetchAccounts() {
     });
 }
 
+document.getElementById("add-account").addEventListener("click", function () {
+    window.location.href = "addAccount.html";
+  });
+
 // Function to fetch the last three transactions
 function fetchTransactions() {
+    const token = localStorage.getItem('token'); // Get the token from localStorage
     $.ajax({
         url: 'http://localhost:3000/api/transactions/filter?number=3&type=jours',
         method: 'GET',
+        headers: {
+            'Authorization': `Bearer ${token}` // Set the Authorization header
+        },
         success: function(data) {
             const transactionTableBody = $('.table.table-striped tbody');
             transactionTableBody.empty();
@@ -72,30 +80,30 @@ function fetchTransactions() {
     });
 }
 
-// Function to fetch the last two notifications
-function fetchNotifications() {
+function downloadTransactionHistory() {
+    const token = localStorage.getItem('token'); // Get the token from localStorage
     $.ajax({
-        url: 'http://localhost:3000/api/notifications?limit=2',
+        url: 'http://localhost:3000/api/transactions/download-history',
         method: 'GET',
-        success: function(data) {
-            const notificationSection = $('.col-md-4.mb-4:last'); // Target the notifications section
-            notificationSection.empty();
-
-            if (data.notifications && data.notifications.length > 0) {
-                data.notifications.forEach(notification => {
-                    notificationSection.append(`
-                        <div class="alert alert-${notification.type === 'low_balance' ? 'warning' : 'info'}">
-                            <h6>${notification.type === 'low_balance' ? 'Solde bas' : 'Nouvelle connexion'}</h6>
-                            <p>${notification.message}</p>
-                        </div>
-                    `);
-                });
-            } else {
-                notificationSection.append('<p>Aucune notification récente.</p>');
-            }
+        headers: {
+            'Authorization': `Bearer ${token}` // Set the Authorization header
+        },
+        xhrFields: {
+            responseType: 'blob' // Set response type to 'blob' for file download
+        },
+        success: function(data, status, xhr) {
+            // Create a link element, set the URL to the blob, and trigger download
+            const url = window.URL.createObjectURL(data);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'transaction_history.csv'; // Specify the file name
+            document.body.append(a);
+            a.click();
+            a.remove();
+            window.URL.revokeObjectURL(url); // Clean up after download
         },
         error: function(error) {
-            console.error('Error fetching notifications:', error);
+            console.error('Error downloading transaction history:', error);
         }
     });
 }
