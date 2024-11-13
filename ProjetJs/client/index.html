@@ -23,13 +23,10 @@
                 <div class="collapse navbar-collapse" id="navbarNav">
                     <ul class="navbar-nav ms-auto">
                         <li class="nav-item">
-                            <a class="nav-link text-white" href="#">Accueil</a>
-                        </li>
-                        <li class="nav-item">
                             <a class="nav-link text-white" href="#">Comptes</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-white" href="#">Transactions</a>
+                            <a class="nav-link text-white" href="transactions.html?type=all">Transactions</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link text-white" href="#">Profil</a>
@@ -50,22 +47,26 @@
         <div class="row">
             <section class="col-md-8 mb-4">
                 <h2 class="h5">Vos Comptes</h2>
+
+
                 <div class="card mb-3">
                     <div class="card-body">
                         <h5 class="card-title">Compte Courant</h5>
                         <p class="card-text">**** 1234</p>
                         <p class="card-text">5,000.00 €</p>
-                        <a href="#" class="btn btn-dark">Voir les transactions</a>
+                        <a href="transaction.html?type=account" data-account-id="5678" class="btn btn-dark view-account-transactions">Voir les transactions</a>
                     </div>
                 </div>
+
                 <div class="card mb-3">
                     <div class="card-body">
-                        <h5 class="card-title">Compte Épargne</h5>
-                        <p class="card-text">**** 5678</p>
-                        <p class="card-text">10,000.00 €</p>
-                        <a href="#" class="btn btn-dark">Voir les transactions</a>
+                        <h5 class="card-title">Compte Courant</h5>
+                        <p class="card-text">**** 1234</p>
+                        <p class="card-text">5,000.00 €</p>
+                        <a href="transaction.html?type=account" data-account-id="5678" class="btn btn-dark view-account-transactions">Voir les transactions</a>
                     </div>
                 </div>
+                               
                 <button class="btn btn-dark w-100" id="add-account">Ajouter un nouveau compte</button>
             </section>
 
@@ -115,7 +116,7 @@
                         </tr>
                     </tbody>
                 </table>
-                <button class="btn btn-dark w-100 mb-2" id="view-all-transactions">Voir toutes les transactions</button>
+                <a class="btn btn-dark w-100 mb-2" id="view-all-transactions" href="transactions.html">Voir toutes les transactions</a>
                 <!-- <div class="d-flex justify-content-between align-items-center">
                     <label for="transaction-period">Période : </label>
                     <select class="form-select w-auto" id="transaction-period">

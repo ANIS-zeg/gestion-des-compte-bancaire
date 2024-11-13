@@ -4,9 +4,9 @@ const authMiddleware = require('../middleware/authMiddleware');
 const NotificationController = require('../controllers/notificationController');
 
 // Route pour récupérer les notifications
-router.get('/notifications', authMiddleware, NotificationController.getNotifications);
+router.get('/', authMiddleware, NotificationController.getNotifications);
 
 // Route pour supprimer une notification
-router.delete('/notifications/:notificationId', authMiddleware, NotificationController.deleteNotification);
+router.delete('/:notificationId', authMiddleware, NotificationController.deleteNotification);
 
 module.exports = router;

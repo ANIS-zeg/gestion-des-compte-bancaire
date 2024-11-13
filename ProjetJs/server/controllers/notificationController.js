@@ -7,7 +7,7 @@ exports.getNotifications = async (req, res) => {
     // Récupérer les notifications de l'utilisateur
     const notifications = await Notification.findAll({
       where: { user_id: userId },
-      order: [['createdAt', 'DESC']] // Trier par date de création
+      order: [['createdAt', 'DESC']] 
     });
 
     res.status(200).json({ notifications });
