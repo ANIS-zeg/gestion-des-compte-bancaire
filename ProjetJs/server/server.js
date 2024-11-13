@@ -7,6 +7,9 @@ const transactionRoutes = require('./routes/transactionRoutes');
 const userRoute = require('./routes/userRoutes');
 const accountRoutes = require('./routes/accountRoutes');
 const notificationRoutes = require('./routes/notificationRoutes')
+const authMiddleware = require('./middleware/authMiddleware');
+
+
 
 require('./models/BankAccount')
 require('./models/LoginHistory')
@@ -28,6 +31,8 @@ app.use('/api/user', userRoute);
 app.use('/api/transactions', transactionRoutes);
 app.use('/api/accounts', accountRoutes);
 app.use('/api/notifications', notificationRoutes);
+app.use('/api/user', authMiddleware, userRoute);
+
 
 
 
