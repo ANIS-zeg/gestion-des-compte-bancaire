@@ -16,8 +16,6 @@ $(document).ready(function () {
                 
                 // Store the token in local storage for session management
                 localStorage.setItem("token", response.token);
-
-                // Redirect to the dashboard (index.html) after successful login
                 window.location.href = "index.html";
             },
             error: function (error) {
@@ -28,30 +26,4 @@ $(document).ready(function () {
 });
 
 
-$(document).ready(function () {
-    // Check if the user is logged in by verifying the presence of a token
-    const token = localStorage.getItem("token");
-
-    if (token) {
-        // Redirect to the login page if not logged in
-        window.location.href = "index.html";
-    } 
-    // else {
-        // Optionally, you could send a request to verify the token on the server side
-        // $.ajax({
-        //     url: "http://localhost:3000/api/user/profile",
-        //     method: "GET",
-        //     headers: { Authorization: `Bearer ${token}` },
-        //     success: function (response) {
-        //         // Display user information on the dashboard if needed
-        //         console.log("User profile:", response);
-        //     },
-        //     error: function () {
-        //         // If token verification fails, remove it and redirect to login
-        //         localStorage.removeItem("token");
-        //         window.location.href = "connexion.html";
-        //     }
-        // });
-    // }
-});
 
