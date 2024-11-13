@@ -5,14 +5,10 @@ const LoginHistory = require('../models/LoginHistory');
 
 exports.register = async (req, res) => {
   try {
-    const { name, email, password, confirmPassword } = req.body;
+    const { name, email, password } = req.body;
 
     if (!name || !email || !password) {
       return res.status(400).json({ message: 'All fields are required' });
-    }
-
-    if (password !== confirmPassword) {
-      return res.status(400).json({ message: 'The typed passwords are not same' });
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
