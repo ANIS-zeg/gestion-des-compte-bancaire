@@ -129,10 +129,24 @@ exports.createTransaction = async (req, res) => {
     if (type === 'withdrawal' && account.balance < amount) {
       return res.status(400).json({ message: 'Insufficient funds for withdrawal.' });
     }
+    
+     // Calcul du nouveau solde après la transaction
+     let newBalance = type === 'deposit' ? parseFloat(account.balance) + parseFloat(amount) : parseFloat(account.balance) - parseFloat(amount);
 
-    // Calcul du nouveau solde après la transaction
-    const newBalance = type === 'deposit' ? parseFloat(account.balance) + parseFloat(amount) : parseFloat(account.balance) - parseFloat(amount);
+     // Vérification du seuil de solde bas
+     if (account.low_balance_threshold && newBalance < account.low_balance_threshold) {
+      await Notification.create({
+        account_id: accountId,
+        type: "low_balance",
+        message: `Le solde de votre compte est inférieur au seuil de ${account.low_balance_threshold}`,
+        threshold: account.low_balance_threshold,
+        user_id : userId
+      });
+      newBalance = account.balance;
+      return res.status(400).json({ message: '`Le solde de votre compte est inférieur au seuil' });
+    }
 
+    
     // Création de la transaction
     const transaction = await Transaction.create({
       type,
@@ -144,18 +158,6 @@ exports.createTransaction = async (req, res) => {
 
     // Mise à jour du solde du compte
     await account.update({ balance: newBalance });
-
-    // Vérification du seuil de solde bas
-    if (account.low_balance_threshold && newBalance < account.low_balance_threshold) {
-      await Notification.create({
-        account_id: accountId,
-        type: "low_balance",
-        message: `Le solde de votre compte est inférieur au seuil de ${account.low_balance_threshold}`,
-        threshold: account.low_balance_threshold,
-      });
-
-      return res.status(400).json({ message: '`Le solde de votre compte est inférieur au seuil' });
-    }
       
 
     res.status(201).json({
