@@ -7,7 +7,7 @@ exports.getUserAccounts = async (req, res) => {
 
     const accounts = await BankAccount.findAll({
       where: { user_id: userId },
-      attributes: ['id', 'name', 'balance'], // Affiche uniquement les champs nécessaires
+      attributes: ['id', 'name', 'balance', 'type'], // Affiche uniquement les champs nécessaires
       include: [
         {
           model: Transaction,
