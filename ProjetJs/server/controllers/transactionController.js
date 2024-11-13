@@ -153,6 +153,8 @@ exports.createTransaction = async (req, res) => {
         message: `Le solde de votre compte est inférieur au seuil de ${account.low_balance_threshold}`,
         threshold: account.low_balance_threshold,
       });
+
+      return res.status(400).json({ message: '`Le solde de votre compte est inférieur au seuil' });
     }
       
 
