@@ -4,7 +4,7 @@ require('dotenv').config();
 const authRoutes = require('./routes/authRoutes');
 const loginHistoryRoutes = require('./routes/loginHistoryRoutes');
 const transactionRoutes = require('./routes/transactionRoutes');
-const userController = require('./routes/userController');
+const userRoute = require('./routes/userRoutes');
 
 require('./models/BankAccount')
 require('./models/LoginHistory')
@@ -22,7 +22,7 @@ app.use(express.urlencoded({ extended: true }));
 // Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/login-history', loginHistoryRoutes);
-app.use('/api/user', userController);
+app.use('/api/user', userRoute);
 app.use('/api/transactions', transactionRoutes);
 
 
