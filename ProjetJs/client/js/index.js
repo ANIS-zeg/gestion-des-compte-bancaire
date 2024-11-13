@@ -210,9 +210,10 @@ $(document).ready(function() {
             success: function(response) {
                 const notificationsContainer = $('#notifications');
                 notificationsContainer.empty();
-    
+
                 if (response.notifications && response.notifications.length > 0) {
                     response.notifications.forEach(notification => {
+                        // Format the date for display
                         const notificationDate = new Date(notification.createdAt);
                         const formattedDate = notificationDate.toLocaleDateString('fr-FR', {
                             year: 'numeric',
@@ -223,15 +224,25 @@ $(document).ready(function() {
                             hour: '2-digit',
                             minute: '2-digit'
                         });
-    
+
+                        // Display different messages based on notification type
+                        let notificationMessage = '';
+                        if (notification.type === 'threshold') {
+                            notificationMessage = `Attention : ${notification.message}`;
+                        } else if (notification.type === 'suspicious_login') {
+                            notificationMessage = `Sécurité : ${notification.message}`;
+                        } else {
+                            notificationMessage = notification.message;
+                        }
+
+                        // Append the notification to the notifications container
                         notificationsContainer.append(`
-                            <div class="alert alert-warning d-flex justify-content-between align-items-center" data-notification-id="${notification.id}">
+                            <div class="alert alert-warning d-flex justify-content-between align-items-start position-relative" data-notification-id="${notification.id}">
                                 <div>
-                                    <h6>${notification.title || 'Solde bas'}</h6>
-                                    <p>${notification.message}</p>
+                                    <h6>${notificationMessage}</h6>
                                     <small class="text-muted">Reçue le ${formattedDate} à ${formattedTime}</small>
                                 </div>
-                                <button class="btn-close delete-notification" aria-label="Close"></button>
+                                <button class="btn-close delete-notification position-absolute top-0 end-0 m-2" aria-label="Close"></button>
                             </div>
                         `);
                     });

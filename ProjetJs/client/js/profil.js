@@ -94,13 +94,48 @@ $(document).ready(function () {
         });
     });
 
+    $.ajax({
+        url: 'http://localhost:3000/api/user/connection-history', 
+        method: 'GET',
+        headers: {
+            'Authorization': `Bearer ${token}`
+        },
+        success: function(response) {
+            const connectionTableBody = $('.table.table-striped tbody');
+            connectionTableBody.empty();
 
+            if (response.history && response.history.length > 0) {
+                response.history.forEach(entry => {
+                    const loginDate = new Date(entry.login_date);
+                    const formattedDate = loginDate.toLocaleDateString('fr-FR', {
+                        year: 'numeric',
+                        month: 'long',
+                        day: 'numeric'
+                    });
+                    const formattedTime = loginDate.toLocaleTimeString('fr-FR', {
+                        hour: '2-digit',
+                        minute: '2-digit'
+                    });
 
+                    connectionTableBody.append(`
+                        <tr>
+                            <td>${formattedDate} à ${formattedTime}</td>
+                            <td>${entry.ip_address}</td>
+                        </tr>
+                    `);
+                });
+            } else {
+                connectionTableBody.append('<tr><td colspan="2" class="text-center">Aucune connexion trouvée.</td></tr>');
+            }
+        },
+        error: function(error) {
+            console.error('Erreur lors de la récupération de l\'historique des connexions :', error);
+            $('.table.table-striped tbody').html('<tr><td colspan="2" class="text-danger text-center">Erreur de chargement.</td></tr>');
+        }
+    });
+    
     $('#logout').click(function () {
-        // Remove the token from localStorage
         localStorage.removeItem('token');
-
-        // Redirect to the login page
         window.location.href = 'connexion.html';
     });
 

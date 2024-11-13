@@ -1,6 +1,7 @@
 const bcrypt = require('bcrypt');
 const User = require('../models/User');
 const BankAccount = require('../models/BankAccount');
+const LoginHistory = require('../models/LoginHistory')
 
 const getUserProfile = async (req, res) => {
     try {
@@ -72,8 +73,28 @@ const getTotalBalance = async (req, res) => {
     }
 };
 
+
+
+const getConnectionHistory = async (req, res) => {
+  try {
+    const userId = req.user.id; // Ensure `req.user.id` is populated via authentication middleware
+
+    const history = await LoginHistory.findAll({
+      where: { user_id: userId },
+      order: [['login_date', 'DESC']],
+      attributes: ['login_date', 'ip_address']
+    });
+
+    res.status(200).json({ history });
+  } catch (error) {
+    console.error('Error fetching connection history:', error);
+    res.status(500).json({ message: 'Error fetching connection history', error });
+  }
+};
+
 module.exports = {
     getUserProfile,
     updateUserProfile,
-    getTotalBalance
+    getTotalBalance,
+    getConnectionHistory
 };
