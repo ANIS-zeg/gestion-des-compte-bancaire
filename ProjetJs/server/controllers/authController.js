@@ -2,6 +2,7 @@ const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const User = require('../models/User');
 const LoginHistory = require('../models/LoginHistory');
+const Notification = require("../models/Notification");
 
 exports.register = async (req, res) => {
   try {
@@ -30,7 +31,7 @@ exports.register = async (req, res) => {
 
 exports.login = async (req, res) => {
   try {
-    const { email, password } = req.body;
+    const { email, password, ipAddress } = req.body;
 
     if (!email || !password) {
       return res.status(400).json({ message: 'All fields are required' });
@@ -50,7 +51,7 @@ exports.login = async (req, res) => {
     // Create JWT token
     const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET, { expiresIn: '1h' });
 
-    const currentIpAddress = req.ip || 'unknown';
+    const currentIpAddress = ipAddress || "unknown";
 
     // Check the last login history for suspicious IP address
     const lastLogin = await LoginHistory.findOne({

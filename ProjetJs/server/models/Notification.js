@@ -19,7 +19,7 @@ const Notification = sequelize.define('Notification', {
   },
   threshold: {
     type: DataTypes.DECIMAL,
-    allowNull: false
+    allowNull: true
   },
   account_id: {
     type: DataTypes.INTEGER,
@@ -27,7 +27,7 @@ const Notification = sequelize.define('Notification', {
       model: BankAccount,
       key: 'id'
     },
-    allowNull: false
+    allowNull: true
   },
   user_id: {  
     type: DataTypes.INTEGER,
