@@ -41,3 +41,24 @@ header .navbar-brand span {
         margin-bottom: 20px;
     }
 }
+
+body {
+    background-color: #f5f9fb;
+  }
+  
+  .card {
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+  }
+  
+  footer {
+    background-color: #f5f9fb;
+    font-size: 14px;
+    color: #666;
+  }
+  
+  .footer-links a {
+    margin: 0 10px;
+    color: #333;
+    text-decoration: none;
+  }
