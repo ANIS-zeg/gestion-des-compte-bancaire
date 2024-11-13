@@ -1,4 +1,3 @@
-
 header .navbar-brand img {
     width: 35px;
     height: 35px;
@@ -30,35 +29,54 @@ header .navbar-brand span {
         font-size: 0.9em;
         padding: 8px;
     }
-    header, footer {
+
+    header,
+    footer {
         text-align: center;
         flex-direction: column;
     }
+
     header nav {
         margin-top: 10px;
     }
-    .footer-info, .footer-links, .footer-social {
+
+    .footer-info,
+    .footer-links,
+    .footer-social {
         margin-bottom: 20px;
     }
 }
 
 body {
     background-color: #f5f9fb;
-  }
-  
-  .card {
+}
+
+.card {
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
     border-radius: 8px;
-  }
-  
-  footer {
+}
+
+footer {
     background-color: #f5f9fb;
     font-size: 14px;
     color: #666;
-  }
-  
-  .footer-links a {
+}
+
+.footer-links a {
     margin: 0 10px;
     color: #333;
     text-decoration: none;
-  }
+}
+
+#showPasswordForm {
+    font-size: 0.9rem;
+    /* Slightly smaller font */
+    color: #333;
+    border-color: #333;
+    transition: background-color 0.3s;
+}
+
+#showPasswordForm:hover {
+    background-color: #f5f5f5;
+    /* Subtle hover effect */
+}
