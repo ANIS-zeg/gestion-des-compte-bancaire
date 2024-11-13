@@ -20,6 +20,10 @@ const BankAccount = sequelize.define('BankAccount', {
     type: DataTypes.DECIMAL,
     defaultValue: 0.0
   },
+  low_balance_threshold: {
+    type: DataTypes.DECIMAL,
+    allowNull: true, 
+  },
   user_id: {
     type: DataTypes.INTEGER,
     references: {

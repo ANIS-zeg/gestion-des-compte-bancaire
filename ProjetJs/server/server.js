@@ -6,6 +6,7 @@ const loginHistoryRoutes = require('./routes/loginHistoryRoutes');
 const transactionRoutes = require('./routes/transactionRoutes');
 const userRoute = require('./routes/userRoutes');
 const accountRoutes = require('./routes/accountRoutes');
+const notificationRoutes = require('./routes/notificationRoutes')
 
 require('./models/BankAccount')
 require('./models/LoginHistory')
@@ -26,6 +27,8 @@ app.use('/api/login-history', loginHistoryRoutes);
 app.use('/api/user', userRoute);
 app.use('/api/transactions', transactionRoutes);
 app.use('/api/accounts', accountRoutes);
+app.use('/api/notifications', notificationRoutes);
+
 
 
 
