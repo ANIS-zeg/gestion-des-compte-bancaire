@@ -98,3 +98,111 @@ exports.downloadTransactionHistory = async (req, res) => {
     res.status(500).json({ message: 'Error generating transaction history CSV', error });
   }
 };
+
+exports.createTransaction = async (req, res) => {
+  try {
+    const userId = req.user.id; // Identifiant de l'utilisateur connecté
+    const { accountId, type, amount, date } = req.body;
+
+    // Validation des données
+    if (!accountId || !type || !amount) {
+      return res.status(400).json({ message: 'Account ID, type, and amount are required.' });
+    }
+
+    if (!['deposit', 'withdrawal'].includes(type)) {
+      return res.status(400).json({ message: 'Invalid transaction type. Use "deposit" or "withdrawal".' });
+    }
+
+    if (amount <= 0) {
+      return res.status(400).json({ message: 'Amount must be positive.' });
+    }
+
+    // Recherche du compte bancaire
+    const account = await BankAccount.findOne({ where: { id: accountId, user_id: userId } });
+
+    if (!account) {
+      return res.status(404).json({ message: 'Bank account not found.' });
+    }
+
+    // Vérification du solde pour un retrait
+    if (type === 'withdrawal' && account.balance < amount) {
+      return res.status(400).json({ message: 'Insufficient funds for withdrawal.' });
+    }
+
+    // Calcul du nouveau solde après la transaction
+    const newBalance = type === 'deposit' ? account.balance + amount : account.balance - amount;
+
+    // Création de la transaction
+    const transaction = await Transaction.create({
+      type,
+      amount,
+      date: date || new Date(), // Utiliser la date actuelle si non spécifiée
+      balance_after_transaction: newBalance,
+      account_id: accountId
+    });
+
+    // Mise à jour du solde du compte
+    await account.update({ balance: newBalance });
+
+    res.status(201).json({
+      message: 'Transaction created successfully.',
+      transaction: {
+        id: transaction.id,
+        type: transaction.type,
+        amount: transaction.amount,
+        date: transaction.date,
+        balance_after_transaction: transaction.balance_after_transaction
+      }
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Error creating transaction', error });
+  }
+};
+
+
+
+exports.getTransactionHistory = async (req, res) => {
+  try {
+    const userId = req.user.id; // Identifiant de l'utilisateur connecté
+    const { accountId } = req.params; // ID du compte passé en paramètre
+    const { type, startDate, endDate } = req.query; // Filtres optionnels
+
+    // Vérifier que le compte appartient bien à l'utilisateur
+    const account = await BankAccount.findOne({ where: { id: accountId, user_id: userId } });
+    if (!account) {
+      return res.status(404).json({ message: 'Bank account not found.' });
+    }
+
+    // Création des conditions de filtrage
+    const whereClause = { account_id: accountId };
+    if (type && ['deposit', 'withdrawal'].includes(type)) {
+      whereClause.type = type;
+    }
+    if (startDate) {
+      whereClause.date = { [Op.gte]: new Date(startDate) };
+    }
+    if (endDate) {
+      whereClause.date = {
+        ...whereClause.date,
+        [Op.lte]: new Date(endDate)
+      };
+    }
+
+    // Récupération des transactions avec filtres
+    const transactions = await Transaction.findAll({
+      where: whereClause,
+      attributes: ['id', 'date', 'type', 'amount', 'balance_after_transaction'],
+      order: [['date', 'DESC']]
+    });
+
+    if (transactions.length === 0) {
+      return res.status(404).json({ message: 'No transactions found for the specified filters.' });
+    }
+
+    res.status(200).json({ transactions });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Error fetching transaction history', error });
+  }
+};

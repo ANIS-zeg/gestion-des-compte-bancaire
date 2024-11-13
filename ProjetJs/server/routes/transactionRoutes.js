@@ -7,4 +7,8 @@ router.get('/filter', authMiddleware, transactionController.filterTransactionsBy
 
 router.get('/download-history', authMiddleware, transactionController.downloadTransactionHistory);
 
+router.post('/add', authMiddleware, transactionController.createTransaction);
+
+router.get('/history/:accountId', authMiddleware, transactionController.getTransactionHistory);
+
 module.exports = router;
