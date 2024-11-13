@@ -11,8 +11,10 @@ exports.register = async (req, res) => {
       return res.status(400).json({ message: 'All fields are required' });
     }
 
+    // hash the password
     const hashedPassword = await bcrypt.hash(password, 10);
 
+    // create user in database
     const newUser = await User.create({
       name,
       email,
@@ -39,15 +41,18 @@ exports.login = async (req, res) => {
       return res.status(404).json({ message: 'User not found' });
     }
 
+    // check if password is valid
     const isPasswordValid = await bcrypt.compare(password, user.password);
     if (!isPasswordValid) {
       return res.status(401).json({ message: 'Invalid credentials' });
     }
 
+    // create jwt token
     const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET, { expiresIn: '1h' });
 
     const ipAddress = req.ip || 'unknown';
 
+    // add login history to db
     await LoginHistory.create({
       user_id: user.id,
       ip_address: ipAddress,
@@ -60,7 +65,4 @@ exports.login = async (req, res) => {
   }
 };
 
-exports.logout = (req, res) => {
-  res.status(200).json({ message: 'Logout successful' });
-};
 

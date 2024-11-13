@@ -5,15 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Transactions - BanqueEnLigne</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/transactions.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
     <header>
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark p-3">
             <div class="container">
-                <a class="navbar-brand d-flex align-items-center" href="#">
-                    <span class="fw-bold">BanqueEnLigne</span>
+                <a class="navbar-brand d-flex align-items-center" href="homePage.html">
+                    <span class="fw-bold">EMA Bank</span>
                 </a>
                 
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -23,20 +23,18 @@
                 <div class="collapse navbar-collapse" id="navbarNav">
                     <ul class="navbar-nav ms-auto">
                         <li class="nav-item">
-                            <a class="nav-link text-white" href="accounts.html">Comptes</a>
+                            <a class="nav-link text-white" href="index.html">Tableau de bord</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-white active" href="transactions.html?type=all">Transactions</a>
+                            <a class="nav-link text-white active" href="transactions.html">Transactions</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-white" href="profile.html">Profil</a>
+                            <a class="nav-link text-white" href="profil.html">Profil</a>
                         </li>
                     </ul>
 
                     <div class="d-flex align-items-center ms-3">
-                        <a href="#" class="text-white">
-                            <img src="user-icon.png" alt="User Icon" class="rounded-circle" width="30" height="30">
-                        </a>
+                        <button class="btn btn-dark" id="logout">Se déconnecter</button>
                     </div>
                 </div>
             </div>
@@ -64,15 +62,14 @@
             </div>
         </div>
 
-        <!-- Tableau des transactions -->
         <div class="table-responsive">
             <table class="table table-striped">
                 <thead>
                     <tr>
                         <th>Date</th>
-                        <th>Description</th>
+                        <th>Heure</th>
+                        <th>Type</th>
                         <th>Montant</th>
-                        <th>Compte</th>
                     </tr>
                 </thead>
                 <tbody id="transaction-table-body">

@@ -2,25 +2,51 @@ $(document).ready(function() {
 
     const urlParams = new URLSearchParams(window.location.search);
     const type = urlParams.get('type');
-    const accountId = urlParams.get('accountId');
+    let endpoint = 'http://localhost:3000/api/transactions/filter';
+    let accountId = null
 
-    let endpoint = 'http://localhost:3000/api/transactions';
+    if (type === "account") {
+        accountId = urlParams.get('accountId');
+        loadTransactions(endpoint, accountId);
+    } else {
+        loadTransactions(endpoint, null);
+    }
 
-    loadTransactions(endpoint, accountId);
+
+
 
     $('#apply-filter').click(function() {
         const number = $('#filter-number').val();
         const filterType = $('#filter-type').val();
+        console.log(number, filterType)
 
         if (number && filterType) {
-            loadTransactions(endpoint, accountId, number, filterType);
+            if (type === "account") {
+                const accountId = urlParams.get('accountId');
+                loadTransactions(endpoint, accountId, number, filterType);
+            } else {
+                loadTransactions(endpoint, null, number, filterType);
+            }
         } else {
             alert('Veuillez entrer un nombre et sélectionner un type.');
         }
     });
 });
 
+$(document).ready(function() {
+    $('#logout').click(function() {
+        // Remove the token from localStorage
+        localStorage.removeItem('token');
+
+        window.location.href = 'connexion.html';
+    });
+});
+
+
 function loadTransactions(endpoint, accountId = null, number = null, type = null) {
+
+    const token = localStorage.getItem('token');
+
     let url = endpoint;
     const params = new URLSearchParams();
 
@@ -40,17 +66,22 @@ function loadTransactions(endpoint, accountId = null, number = null, type = null
     $.ajax({
         url: url,
         method: 'GET',
+        headers: {
+            'Authorization': `Bearer ${token}`
+        },
         success: function(data) {
             $('#transaction-table-body').empty();
 
             if (data.transactions && data.transactions.length > 0) {
                 data.transactions.forEach(transaction => {
+                    const [date, time] = transaction.date.split('T');
+                    const formattedTime = time.split('.')[0];
                     $('#transaction-table-body').append(`
                         <tr>
-                            <td>${transaction.date}</td>
-                            <td>${transaction.description}</td>
+                            <td>${date}</td>
+                            <td>${formattedTime}</td>
+                            <td>${transaction.type}</td>
                             <td>${transaction.amount} €</td>
-                            <td>${transaction.account_name || ''}</td>
                         </tr>
                     `);
                 });
