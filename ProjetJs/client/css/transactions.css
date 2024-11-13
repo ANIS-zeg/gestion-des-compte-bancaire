@@ -1,4 +1,4 @@
-/* Make the entire page 100vh */
+
 html, body {
     height: 100vh;
     margin: 0;
@@ -6,7 +6,6 @@ html, body {
     flex-direction: column;
 }
 
-/* Ensure main container takes up all available space */
 main.container {
     flex: 1;
     overflow-y: auto;
@@ -14,8 +13,7 @@ main.container {
     flex-direction: column;
 }
 
-/* Scrollable transactions table */
 .table-responsive {
-    max-height: 60vh; /* Adjust as needed */
+    max-height: 60vh;
     overflow-y: auto;
 }

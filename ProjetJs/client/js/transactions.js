@@ -38,7 +38,6 @@ $(document).ready(function() {
         // Remove the token from localStorage
         localStorage.removeItem('token');
 
-        // Redirect to the login page
         window.location.href = 'connexion.html';
     });
 });
@@ -68,7 +67,7 @@ function loadTransactions(endpoint, accountId = null, number = null, type = null
         url: url,
         method: 'GET',
         headers: {
-            'Authorization': `Bearer ${token}` // Set the Authorization header
+            'Authorization': `Bearer ${token}`
         },
         success: function(data) {
             $('#transaction-table-body').empty();

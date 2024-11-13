@@ -1,8 +1,14 @@
 $(document).ready(function() {
-    // Fetch accounts and calculate total balance
+
+    // check if user is connected
+    if (!localStorage.getItem('token')) {
+        window.location.href = "connexion.html"
+    }
+
+    // get accounts
     fetchAccounts();
 
-    // Fetch the last three transactions
+    // get transactions
     fetchTransactions();
 
     $('#download-history').click(function() {
@@ -10,7 +16,6 @@ $(document).ready(function() {
     });
 });
 
-// Function to fetch accounts and calculate total balance
 function fetchAccounts() {
     const token = localStorage.getItem('token'); // Get the token from localStorage
     $.ajax({
@@ -24,7 +29,7 @@ function fetchAccounts() {
             accountSection.empty();
 
             if (data.accounts && data.accounts.length > 0) {
-                
+                // create the divs of transactions
                 data.accounts.forEach(account => {
                     console.log(account)
                     accountSection.append(`
@@ -64,14 +69,13 @@ document.getElementById("add-account").addEventListener("click", function () {
 });
 
 
-// Function to fetch the last three transactions
 function fetchTransactions() {
     const token = localStorage.getItem('token'); // Get the token from localStorage
     $.ajax({
         url: 'http://localhost:3000/api/transactions/filter?number=1000&type=annees',
         method: 'GET',
         headers: {
-            'Authorization': `Bearer ${token}` // Set the Authorization header
+            'Authorization': `Bearer ${token}`
         },
         success: function(data) {
             const transactionTableBody = $('.table.table-striped tbody');
@@ -101,26 +105,26 @@ function fetchTransactions() {
 }
 
 function downloadTransactionHistory() {
-    const token = localStorage.getItem('token'); // Get the token from localStorage
+    const token = localStorage.getItem('token'); 
     $.ajax({
         url: 'http://localhost:3000/api/transactions/download-history',
         method: 'GET',
         headers: {
-            'Authorization': `Bearer ${token}` // Set the Authorization header
+            'Authorization': `Bearer ${token}` 
         },
         xhrFields: {
-            responseType: 'blob' // Set response type to 'blob' for file download
+            responseType: 'blob'
         },
         success: function(data, status, xhr) {
-            // Create a link element, set the URL to the blob, and trigger download
+
             const url = window.URL.createObjectURL(data);
             const a = document.createElement('a');
             a.href = url;
-            a.download = 'transaction_history.csv'; // Specify the file name
+            a.download = 'transaction_history.csv';
             document.body.append(a);
             a.click();
             a.remove();
-            window.URL.revokeObjectURL(url); // Clean up after download
+            window.URL.revokeObjectURL(url);
         },
         error: function(error) {
             console.error('Error downloading transaction history:', error);

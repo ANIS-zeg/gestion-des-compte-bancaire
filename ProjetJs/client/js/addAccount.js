@@ -26,5 +26,14 @@ $(document).ready(function () {
         }
       });
     });
+
+      $('#logout').click(function() {
+          // Remove the token from localStorage
+          localStorage.removeItem('token');
+  
+          // Redirect to the login page
+          window.location.href = 'connexion.html';
+      });
+
   });
   

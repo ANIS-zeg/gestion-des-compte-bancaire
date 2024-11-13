@@ -70,7 +70,6 @@ footer {
 
 #showPasswordForm {
     font-size: 0.9rem;
-    /* Slightly smaller font */
     color: #333;
     border-color: #333;
     transition: background-color 0.3s;
@@ -78,5 +77,4 @@ footer {
 
 #showPasswordForm:hover {
     background-color: #f5f5f5;
-    /* Subtle hover effect */
 }
