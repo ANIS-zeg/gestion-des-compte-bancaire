@@ -1,0 +1,21 @@
+/* Make the entire page 100vh */
+html, body {
+    height: 100vh;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Ensure main container takes up all available space */
+main.container {
+    flex: 1;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Scrollable transactions table */
+.table-responsive {
+    max-height: 60vh; /* Adjust as needed */
+    overflow-y: auto;
+}

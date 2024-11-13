@@ -59,18 +59,18 @@ exports.filterTransactionsByPeriod = async (req, res) => {
 
     let fromDate = null;
 
-    if (number && type && ['jours', 'mois', 'annees'].includes(type)) {
+    if (number && type && ['days', 'months', 'years'].includes(type)) {
       const periodValue = parseInt(number);
       fromDate = new Date();
 
       switch (type) {
-        case 'jours':
+        case 'days':
           fromDate.setDate(fromDate.getDate() - periodValue);
           break;
-        case 'mois':
+        case 'months':
           fromDate.setMonth(fromDate.getMonth() - periodValue);
           break;
-        case 'annees':
+        case 'years':
           fromDate.setFullYear(fromDate.getFullYear() - periodValue);
           break;
         default:
@@ -92,7 +92,7 @@ exports.filterTransactionsByPeriod = async (req, res) => {
       }]
     });
 
-    const transactions = accountsWithTransactions.flatMap(account => account.transactions);
+    const transactions = accountsWithTransactions.flatMap(account => account.transactions).reverse();
 
     res.status(200).json({ transactions });
   } catch (error) {
