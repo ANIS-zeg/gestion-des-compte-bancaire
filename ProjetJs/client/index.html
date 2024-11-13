@@ -85,6 +85,11 @@
                 <div class="actions pt-5">
                     <h2 class="h5 mb-4 text-center">Actions Rapides</h2>
                     <button class="btn btn-dark w-100 mb-2" id="new-transaction">Nouvelle Transaction</button>
+                    <script>
+                        document.getElementById("new-transaction").addEventListener("click", function () {
+                          window.location.href = "addTransaction.html";
+                        });
+                      </script>
                     <button class="btn btn-secondary w-100 mb-2" id="download-history">Télécharger l'historique</button>
                 </div>
             </section>
