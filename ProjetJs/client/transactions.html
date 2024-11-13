@@ -23,13 +23,10 @@
                 <div class="collapse navbar-collapse" id="navbarNav">
                     <ul class="navbar-nav ms-auto">
                         <li class="nav-item">
-                            <a class="nav-link text-white" href="dashboard.html">Accueil</a>
-                        </li>
-                        <li class="nav-item">
                             <a class="nav-link text-white" href="accounts.html">Comptes</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-white active" href="transactions.html">Transactions</a>
+                            <a class="nav-link text-white active" href="transactions.html?type=all">Transactions</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link text-white" href="profile.html">Profil</a>
@@ -49,7 +46,6 @@
     <main class="container my-4">
         <h2 class="h4 text-center mb-4">Historique des Transactions</h2>
 
-        <!-- Section de filtrage -->
         <div class="row mb-4">
             <div class="col-md-4">
                 <label for="filter-number" class="form-label">Nombre :</label>
@@ -76,6 +72,7 @@
                         <th>Date</th>
                         <th>Description</th>
                         <th>Montant</th>
+                        <th>Compte</th>
                     </tr>
                 </thead>
                 <tbody id="transaction-table-body">
