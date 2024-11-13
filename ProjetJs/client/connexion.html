@@ -79,5 +79,15 @@
   <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
   <script src="js/connexion.js"></script>
+  <script>
+    // Check if user is logged in
+document.addEventListener("DOMContentLoaded", function() {
+    const token = localStorage.getItem("token"); // Check for the stored token
+    if (token) {
+        // Redirect to dashboard if token exists
+        window.location.href = "index.html";
+    }
+});
+  </script>
 </body>
 </html>
