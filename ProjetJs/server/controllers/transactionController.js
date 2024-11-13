@@ -188,12 +188,10 @@ exports.createTransaction = async (req, res) => {
       await Notification.create({
         account_id: accountId,
         type: "low_balance",
-        message: `Le solde de votre compte est inférieur au seuil de ${account.low_balance_threshold}`,
+        message: `Le solde de votre compte ${account.name} est inférieur au seuil de ${account.low_balance_threshold}`,
         threshold: account.low_balance_threshold,
         user_id : userId
       });
-      newBalance = account.balance;
-      return res.status(400).json({ message: '`Le solde de votre compte est inférieur au seuil' });
     }
 
     
