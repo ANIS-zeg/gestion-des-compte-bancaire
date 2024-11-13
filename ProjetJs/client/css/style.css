@@ -1,0 +1,43 @@
+
+header .navbar-brand img {
+    width: 35px;
+    height: 35px;
+}
+
+header .navbar-brand span {
+    font-size: 1.25rem;
+    font-weight: bold;
+    color: #ffffff;
+}
+
+.navbar-nav .nav-link {
+    margin-right: 15px;
+    font-size: 1rem;
+}
+
+.navbar-nav .nav-link:hover {
+    color: #adb5bd;
+}
+
+.user-icon img {
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+}
+
+@media (max-width: 576px) {
+    .dashboard .btn {
+        font-size: 0.9em;
+        padding: 8px;
+    }
+    header, footer {
+        text-align: center;
+        flex-direction: column;
+    }
+    header nav {
+        margin-top: 10px;
+    }
+    .footer-info, .footer-links, .footer-social {
+        margin-bottom: 20px;
+    }
+}
