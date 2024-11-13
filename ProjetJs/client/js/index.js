@@ -10,6 +10,7 @@ $(document).ready(function() {
     fetchAccounts();
     fetchTransactions();
     updateTotalBalance();
+    fetchNotifications();
 
     // Event listener for download transaction history
     $('#download-history').click(function() {
@@ -33,7 +34,7 @@ $(document).ready(function() {
             }
         });
     }
-    
+
     // Event listener for deleting an account
     $(document).on('click', '.delete-account', function() {
         const accountId = $(this).data('account-id'); 
@@ -53,10 +54,38 @@ $(document).ready(function() {
                 $(`[data-account-id="${accountId}"]`).closest('.card').remove();
                 fetchTransactions(); // Refresh transactions
                 updateTotalBalance(); // Update total balance
+                console.log("Account successfully deleted:", accountId); // Debugging
             },
             error: function(error) {
                 console.error("Erreur lors de la suppression du compte :", error);
                 alert("Erreur lors de la suppression du compte. Veuillez réessayer.");
+            }
+        });
+    });
+
+    // Event listener for deleting a notification
+    $(document).on('click', '.delete-notification', function() {
+        const notificationId = $(this).closest('.alert').data('notification-id');
+        console.log("Delete button clicked for notification ID:", notificationId); // Debugging
+
+        $.ajax({
+            url: `http://localhost:3000/api/notifications/${notificationId}`,
+            method: 'DELETE',
+            headers: {
+                'Authorization': `Bearer ${localStorage.getItem("token")}`
+            },
+            success: function() {
+                console.log("Notification deleted successfully:", notificationId); // Debugging
+                $(`[data-notification-id="${notificationId}"]`).remove(); // Remove notification from DOM
+
+                // Show placeholder if no notifications remain
+                if ($('#notifications .alert').length === 0) {
+                    $('#notifications').append('<p class="text-center">Aucune notification.</p>');
+                }
+            },
+            error: function(error) {
+                console.error('Erreur lors de la suppression de la notification :', error);
+                alert("Erreur lors de la suppression de la notification. Veuillez réessayer.");
             }
         });
     });
@@ -111,7 +140,7 @@ $(document).ready(function() {
                 if (data.accounts && data.accounts.length > 0) {
                     data.accounts.forEach(account => {
                         accountSection.append(`
-                            <div class="card mb-3">
+                            <div class="card mb-3" data-account-id="${account.id}">
                                 <div class="card-body">
                                     <h5 class="card-title">${account.name}</h5>
                                     <p class="card-text">${account.type}</p>
@@ -169,4 +198,52 @@ $(document).ready(function() {
             }
         });
     }
+
+    // Function to fetch notifications
+    function fetchNotifications() {
+        $.ajax({
+            url: 'http://localhost:3000/api/notifications',
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${localStorage.getItem('token')}`
+            },
+            success: function(response) {
+                const notificationsContainer = $('#notifications');
+                notificationsContainer.empty();
+    
+                if (response.notifications && response.notifications.length > 0) {
+                    response.notifications.forEach(notification => {
+                        const notificationDate = new Date(notification.createdAt);
+                        const formattedDate = notificationDate.toLocaleDateString('fr-FR', {
+                            year: 'numeric',
+                            month: 'long',
+                            day: 'numeric'
+                        });
+                        const formattedTime = notificationDate.toLocaleTimeString('fr-FR', {
+                            hour: '2-digit',
+                            minute: '2-digit'
+                        });
+    
+                        notificationsContainer.append(`
+                            <div class="alert alert-warning d-flex justify-content-between align-items-center" data-notification-id="${notification.id}">
+                                <div>
+                                    <h6>${notification.title || 'Solde bas'}</h6>
+                                    <p>${notification.message}</p>
+                                    <small class="text-muted">Reçue le ${formattedDate} à ${formattedTime}</small>
+                                </div>
+                                <button class="btn-close delete-notification" aria-label="Close"></button>
+                            </div>
+                        `);
+                    });
+                } else {
+                    notificationsContainer.append('<p class="text-center">Aucune notification.</p>');
+                }
+            },
+            error: function(error) {
+                console.error('Erreur lors de la récupération des notifications :', error);
+                $('#notifications').html('<p class="text-danger">Erreur lors du chargement des notifications.</p>');
+            }
+        });
+    }
+    
 });
