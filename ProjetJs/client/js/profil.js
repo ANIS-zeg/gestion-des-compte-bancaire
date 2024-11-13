@@ -25,11 +25,40 @@ $(document).ready(function () {
         }
     });
 
-    // Event listener for updating profile information
+    // Event listener for updating password
     $('#updateProfile').click(function () {
+        const token = localStorage.getItem("token");
 
+        // Retrieve updated values from the input fields
         const updatedName = $('#name').val();
         const updatedEmail = $('#email').val();
+
+        // Prepare data for profile update
+        const profileData = {
+            name: updatedName,
+            email: updatedEmail
+        };
+
+        // Check if the password change form is visible and gather password fields if needed
+        if ($('#passwordForm').is(':visible')) {
+            const currentPassword = $('#currentPassword').val();
+            const newPassword = $('#newPassword').val();
+            const confirmPassword = $('#confirmPassword').val();
+
+            // Validate passwords
+            if (!currentPassword || !newPassword || !confirmPassword) {
+                $('#profileMessage').text("Veuillez remplir tous les champs du mot de passe.").addClass("text-danger");
+                return;
+            }
+            if (newPassword !== confirmPassword) {
+                $('#profileMessage').text("Les nouveaux mots de passe ne correspondent pas.").addClass("text-danger");
+                return;
+            }
+
+            // Add password data to profile update if password fields are filled
+            profileData.currentPassword = currentPassword;
+            profileData.newPassword = newPassword;
+        }
 
         // Make an authenticated AJAX request to update profile data
         $.ajax({
@@ -39,12 +68,13 @@ $(document).ready(function () {
                 'Authorization': `Bearer ${token}`
             },
             contentType: 'application/json',
-            data: JSON.stringify({
-                name: updatedName,
-                email: updatedEmail
-            }),
+            data: JSON.stringify(profileData),
             success: function (response) {
                 $('#profileMessage').text("Profil mis à jour avec succès.").removeClass("text-danger").addClass("text-success");
+                // Clear password fields after successful update
+                $('#currentPassword, #newPassword, #confirmPassword').val('');
+                $('#passwordForm').slideUp(300);  // Hide the password form after update
+                $('#showPasswordForm').text("Changer le mot de passe");
             },
             error: function (error) {
                 console.error("Error details:", error);
@@ -57,6 +87,7 @@ $(document).ready(function () {
     });
 
 
+
     $('#showPasswordForm').click(function () {
         $('#passwordForm').slideToggle(300, function () {
             $('#showPasswordForm').text($(this).is(':visible') ? 'Annuler' : 'Changer le mot de passe');
@@ -65,7 +96,7 @@ $(document).ready(function () {
 
 
 
-    $('#logout').click(function() {
+    $('#logout').click(function () {
         // Remove the token from localStorage
         localStorage.removeItem('token');
 
