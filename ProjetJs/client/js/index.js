@@ -253,20 +253,38 @@ $(document).ready(function () {
                                     <div class="chart-container">
                                         <canvas id="chart-${account.id}"></canvas>
                                         <style> .chart-container {
-                                                    width: 100%; /* Allow the chart to be responsive within its container */
-                                                    max-width: 300px; /* Set a maximum width for larger screens */
-                                                    height: 200px; /* Default height */
+                                                    width: 100%;          /* Full width by default */
+                                                    max-width: 280px;     /* Set a max width for larger screens */
+                                                    height: 200px;        /* Default height */
 
-                                                    /* Media query for medium screens */
-                                                    @media (max-width: 768px) {
-                                                        max-width: 100%; /* Allow full width within the container on smaller screens */
-                                                        height: 150px; /* Adjust height */
+                                                    /* For medium screens (tablets, small laptops) */
+                                                    @media (max-width: 1024px) {
+                                                        max-width: 250px;
+                                                        height: 180px;
                                                     }
 
-                                                    /* Media query for very small screens (like iPhone 14 Pro Max) */
+                                                    /* For smaller screens (large phones, smaller tablets) */
+                                                    @media (max-width: 768px) {
+                                                        max-width: 220px;
+                                                        height: 160px;
+                                                    }
+
+                                                    /* For very small screens (standard smartphones) */
+                                                    @media (max-width: 576px) {
+                                                        max-width: 180px;
+                                                        height: 140px;
+                                                    }
+
+                                                    /* For ultra-small screens (like iPhone 14 Pro Max and similar) */
                                                     @media (max-width: 430px) {
-                                                        max-width: 100%; /* Ensure it doesn't overflow */
-                                                        height: 120px; /* Further reduce height for small screens */
+                                                        max-width: 160px;
+                                                        height: 120px;
+                                                    }
+
+                                                    /* For extra-narrow screens (older or mini smartphones) */
+                                                    @media (max-width: 360px) {
+                                                        max-width: 140px;
+                                                        height: 100px;
                                                     }
                                                 }
                                         </style>
