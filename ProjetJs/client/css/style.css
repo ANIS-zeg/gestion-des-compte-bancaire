@@ -83,3 +83,39 @@ footer {
     max-height: 50px;
     overflow-y: auto;
 }
+
+.chart-container {
+    width: 100%;
+    max-width: 280px;
+    height: 200px;
+
+    /* For medium screens (tablets, small laptops) */
+    @media (max-width: 1024px) {
+        max-width: 250px;
+        height: 180px;
+    }
+
+    /* For smaller screens (large phones, smaller tablets) */
+    @media (max-width: 768px) {
+        max-width: 220px;
+        height: 160px;
+    }
+
+    /* For very small screens (standard smartphones) */
+    @media (max-width: 576px) {
+        max-width: 180px;
+        height: 140px;
+    }
+
+    /* For ultra-small screens (like iPhone 14 Pro Max) */
+    @media (max-width: 430px) {
+        max-width: 160px;
+        height: 120px;
+    }
+
+    /* For extra-narrow screens (older or mini smartphones) */
+    @media (max-width: 360px) {
+        max-width: 140px;
+        height: 100px;
+    }
+}
