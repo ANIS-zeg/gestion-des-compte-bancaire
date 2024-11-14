@@ -247,18 +247,51 @@ $(document).ready(function () {
                                         <h5 class="card-title">${account.name}</h5>
                                         <p class="card-text">${account.type}</p>
                                         <p class="card-text">${account.balance} €</p>
-                                        <div class="d-flex gap-2 align-items-start"> <!-- Flex container for aligned buttons -->
-                                            <a href="transactions.html?type=account&accountId=${account.id}" class="btn btn-dark view-account-transactions">Voir les transactions</a>
-                                            <button class="btn btn-danger delete-account" data-account-id="${account.id}">Supprimer</button>
-                                        </div>
+                                        <a href="transactions.html?type=account&accountId=${account.id}" class="btn btn-dark view-account-transactions">Voir les transactions</a>
+                                        <button class="btn btn-danger delete-account mt-2" data-account-id="${account.id}">Supprimer</button>
                                     </div>
                                     <div class="chart-container">
                                         <canvas id="chart-${account.id}"></canvas>
+                                        <style> .chart-container {
+                                                    width: 100%;          /* Full width by default */
+                                                    max-width: 280px;     /* Set a max width for larger screens */
+                                                    height: 200px;        /* Default height */
+
+                                                    /* For medium screens (tablets, small laptops) */
+                                                    @media (max-width: 1024px) {
+                                                        max-width: 250px;
+                                                        height: 180px;
+                                                    }
+
+                                                    /* For smaller screens (large phones, smaller tablets) */
+                                                    @media (max-width: 768px) {
+                                                        max-width: 220px;
+                                                        height: 160px;
+                                                    }
+
+                                                    /* For very small screens (standard smartphones) */
+                                                    @media (max-width: 576px) {
+                                                        max-width: 180px;
+                                                        height: 140px;
+                                                    }
+
+                                                    /* For ultra-small screens (like iPhone 14 Pro Max and similar) */
+                                                    @media (max-width: 430px) {
+                                                        max-width: 160px;
+                                                        height: 120px;
+                                                    }
+
+                                                    /* For extra-narrow screens (older or mini smartphones) */
+                                                    @media (max-width: 360px) {
+                                                        max-width: 140px;
+                                                        height: 100px;
+                                                    }
+                                                }
+                                        </style>
                                     </div>
                                 </div>
                             </div>
                         `);
-                        
 
 
                         // Call the new function to render the balance evolution chart for each account
