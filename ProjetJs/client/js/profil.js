@@ -25,21 +25,17 @@ $(document).ready(function () {
         }
     });
 
-    // Event listener for updating password
     $('#updateProfile').click(function () {
         const token = localStorage.getItem("token");
 
-        // Retrieve updated values from the input fields
         const updatedName = $('#name').val();
         const updatedEmail = $('#email').val();
 
-        // Prepare data for profile update
         const profileData = {
             name: updatedName,
             email: updatedEmail
         };
 
-        // Check if the password change form is visible and gather password fields if needed
         if ($('#passwordForm').is(':visible')) {
             const currentPassword = $('#currentPassword').val();
             const newPassword = $('#newPassword').val();
@@ -55,7 +51,6 @@ $(document).ready(function () {
                 return;
             }
 
-            // Add password data to profile update if password fields are filled
             profileData.currentPassword = currentPassword;
             profileData.newPassword = newPassword;
         }
@@ -71,9 +66,8 @@ $(document).ready(function () {
             data: JSON.stringify(profileData),
             success: function (response) {
                 $('#profileMessage').text("Profil mis à jour avec succès.").removeClass("text-danger").addClass("text-success");
-                // Clear password fields after successful update
                 $('#currentPassword, #newPassword, #confirmPassword').val('');
-                $('#passwordForm').slideUp(300);  // Hide the password form after update
+                $('#passwordForm').slideUp(300);  
                 $('#showPasswordForm').text("Changer le mot de passe");
             },
             error: function (error) {

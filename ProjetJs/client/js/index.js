@@ -225,21 +225,26 @@ $(document).ready(function() {
                             minute: '2-digit'
                         });
 
-                        // Display different messages based on notification type
                         let notificationMessage = '';
+                        let notificationTitle = '';
+                        let alertClass = 'alert-warning'; 
+
                         if (notification.type === 'threshold') {
                             notificationMessage = `Attention : ${notification.message}`;
+                            notificationTitle = 'Solde bas';
                         } else if (notification.type === 'suspicious_login') {
                             notificationMessage = `Sécurité : ${notification.message}`;
+                            notificationTitle = 'Alerte connexion';
+                            alertClass = 'alert-primary'; 
                         } else {
                             notificationMessage = notification.message;
                         }
 
-                        // Append the notification to the notifications container
                         notificationsContainer.append(`
-                            <div class="alert alert-warning d-flex justify-content-between align-items-start position-relative" data-notification-id="${notification.id}">
+                            <div class="alert ${alertClass} d-flex justify-content-between align-items-start position-relative" data-notification-id="${notification.id}">
                                 <div>
-                                    <h6>${notificationMessage}</h6>
+                                    <h6>${notificationTitle}</h6>
+                                    <p>${notificationMessage}</p>
                                     <small class="text-muted">Reçue le ${formattedDate} à ${formattedTime}</small>
                                 </div>
                                 <button class="btn-close delete-notification position-absolute top-0 end-0 m-2" aria-label="Close"></button>
