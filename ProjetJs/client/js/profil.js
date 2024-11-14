@@ -2,7 +2,7 @@ $(document).ready(function () {
     // Load user profile information on page load
     const token = localStorage.getItem("token");
     if (!token) {
-        window.location.href = "/connexion.html";
+        window.location.href = "connexion.html";
         return;
     }
 
