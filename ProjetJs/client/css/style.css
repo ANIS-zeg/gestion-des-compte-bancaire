@@ -78,3 +78,8 @@ footer {
 #showPasswordForm:hover {
     background-color: #f5f5f5;
 }
+
+.table-history {
+    max-height: 50px;
+    overflow-y: auto;
+}
